@@ -22,16 +22,17 @@ class TopicsController extends Controller
 
     public function index(Request $request, Topic $topic)
     {
-        return array(
-
-            'test' => 'sss'
-        );
         $topics = $topic->withOrder($request->order)->paginate(20);
         return view('topics.index', compact('topics'));
     }
 
-    public function show(Topic $topic)
+    public function show(Request $request,Topic $topic)
     {
+      // URL 矫正
+      if ( ! empty($topic->slug) && $topic->slug != $request->slug) {
+          return redirect($topic->link(), 301);
+      }
+
         return view('topics.show', compact('topic'));
     }
 
@@ -47,13 +48,14 @@ class TopicsController extends Controller
         $topic->user_id = Auth::id();
         $topic->save();
 
-        return redirect()->route('topics.show', $topic->id)->with('message', 'Created successfully.');
+        return redirect()->to($topic->link())->with('success', '成功创建话题！');
     }
 
 	public function edit(Topic $topic)
 	{
-        $this->authorize('update', $topic);
-		    return view('topics.create_and_edit', compact('topic'));
+      $this->authorize('update', $topic);
+      $categories = Category::all();
+      return view('topics.create_and_edit', compact('topic', 'categories'));
 	}
 
 	public function update(TopicRequest $request, Topic $topic)
@@ -61,7 +63,7 @@ class TopicsController extends Controller
 		$this->authorize('update', $topic);
 		$topic->update($request->all());
 
-		return redirect()->route('topics.show', $topic->id)->with('message', 'Updated successfully.');
+		return redirect()->to($topic->link())->with('success', '成功更新话题！');
 	}
 
 	public function destroy(Topic $topic)
