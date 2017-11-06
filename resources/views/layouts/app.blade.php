@@ -9,6 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'MAYDAY') - 超棒的BBS</title>
+    <meta name="description" content="@yield('description', '超棒的BBS')" />
 
     <!-- Styles -->
     <!-- Styles -->
