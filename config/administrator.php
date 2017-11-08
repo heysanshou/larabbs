@@ -36,9 +36,19 @@ return array(
      *      'Analytics' => ['E-Commerce' => 'page.pages.analytics'],
      *  ]
      */
-    'menu' => [
+     'menu' => [
         '用户与权限' => [
             'users',
+            'roles',
+            'permissions',
+        ],
+        '内容管理' => [
+            'categories',
+            'topics',
+            'replies',
+        ],
+        '站点管理' => [
+            'settings.site',
         ],
     ],
 
@@ -81,4 +91,9 @@ return array(
 
     // 可选的语言，如果不为空，将会在页面顶部显示『选择语言』按钮
     'locales' => [],
+
+    // 当选项 `permission` 权限检测不通过时，会重定向用户到此处设置的路径
+    'login_path' => 'permission-denied',
+
+    'home_page' => 'topics',
 );
